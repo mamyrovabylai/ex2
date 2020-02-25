@@ -105,6 +105,29 @@ const queue& queue::operator= (const queue& q){
     return *this;
 }
 
+queue::queue(std::initializer_list<double> init):
+    current_size(init.size())
+{
+    if(current_size == 0){
+        first = nullptr;
+        last = nullptr;
+    } else {
+        bool firstOrNot = true;
+        for(double d: init){
+            qnode* newNode = new qnode(d);
+            if(firstOrNot){
+                first = newNode;
+                last = newNode;
+                firstOrNot = false;
+            } else {
+                last->next = newNode;
+                last = newNode;
+            }
+        }
+        
+    }
+}
+
 queue::~queue(){
     qnode* curr = first;
     while(curr){
@@ -209,6 +232,13 @@ void testqueue(){
     
     q2.print(std::cout);
     q2.checkinvariant();
+    queue q3 = {1};
+    q3.checkinvariant();
+    q3.push(2);
+    q3.checkinvariant();
+    q3.print(std::cout);
+    q3.pop();
+    q3.checkinvariant();
    
     
 }
