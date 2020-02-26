@@ -1,5 +1,5 @@
 
-#ifndef QUEUE_INCLUDED 
+#ifndef QUEUE_INCLUDED
 #define QUEUE_INCLUDED  1
 
 #include <iostream>
@@ -10,24 +10,27 @@
 struct qnode
 {
    double val;
-   qnode* next;    // Next in the queue. 
+   qnode* next;    // Next in the queue.
 
    qnode( double val ) :
       val( val ),
-      next( nullptr )  
-   { } 
+      next( nullptr )
+   { }
 };
 
 
 class queue
 {
-    
-   size_t current_size; 
+   size_t current_size;
    qnode* first;
    qnode* last;
 
 public:
-   queue( );
+   queue( ) :
+      current_size(0),
+      first( nullptr ),
+      last( nullptr )
+   { }
       
    queue( const queue& q );
    const queue& operator = ( const queue& q );
@@ -39,26 +42,32 @@ public:
       // for( double d : init ) to go through all
       // elements in the initializer_list.
 
-   void push( double d );  
+   void push( double d );
 
    void pop( );
    void clear( );
 
    double peek( ) const;
 
-   size_t size( ) const { return current_size; } 
-   bool empty( ) const { return current_size == 0; } 
+   size_t size( ) const { return current_size; }
+   bool empty( ) const { return current_size == 0; }
    
    void print( std::ostream& ) const;
 
-   bool checkinvariant( ) const; 
-      // Call this function frequently.   
-}; 
+   bool checkinvariant( ) const;
+      // Call this function frequently.
+};
+
+inline std::ostream& operator << ( std::ostream& out, const queue& q )
+{
+   q. print( out );
+   return out;
+}
 
 
 void testqueue( );
    // Write this function in queue.cpp. It must do some tests on
-   // queue. 
+   // queue.
 
 #endif
 

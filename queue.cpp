@@ -8,7 +8,7 @@ bool queue::checkinvariant( ) const
 {
    if( current_size == 0 )
    {
-      if( first ) 
+      if( first )
       {
          std::cout << "INVARIANT: ";
          std::cout << "current_size == 0, but first != nullptr\n";
@@ -28,18 +28,18 @@ bool queue::checkinvariant( ) const
    size_t s = 0;
    const qnode* l = nullptr; // This will remember the last node.
 
-   for( const qnode* p = first; p; p = p -> next ) 
+   for( const qnode* p = first; p; p = p -> next )
    {
       if( s == current_size )
       {
          std::cout << "INVARIANT: ";
          std::cout << "current_size is less than real size: ";
-         std::cout << current_size << "\n\n"; 
-         // I don't want to count further because list may be corrupt. 
+         std::cout << current_size << "\n\n";
+         // I don't want to count further because list may be corrupt.
          return false;
       }
-      ++ s;  
-      l = p; 
+      ++ s;
+      l = p;
    }
 
    if( s != current_size )
@@ -59,16 +59,12 @@ bool queue::checkinvariant( ) const
       return false;
    }
 
-   return true; 
+   return true;
 }
 
 
 
 
-queue::queue():
-    current_size(0),
-    first(nullptr),
-last(nullptr){ }
 
 queue::queue( const queue& q ):
 current_size(q.current_size){
@@ -88,20 +84,23 @@ current_size(q.current_size){
 }
 
 const queue& queue::operator= (const queue& q){
-    current_size = q.current_size;
-    if (current_size == 0) {
-        first = nullptr;
-        last = nullptr;
+    
+    if(q.current_size == 0){
+        clear();
     } else {
-        first = new qnode(q.first->val);
-        last = first;
-        for(qnode* head = q.first->next; head; head = head->next){
-            qnode* newNode = new qnode(head->val);
-            last->next = newNode;
-            last = newNode;
+        while(current_size>q.current_size) pop();
+        while(current_size<q.current_size) push(0);
+        qnode* currq = q.first;
+        qnode* currm = first;
+        for(int i=0;i<current_size;i++){
+            last = currm;
+            currm->val = currq->val;
+            currm = currm->next;
+            currq = currq->next;
         }
-        last->next = nullptr;
+        
     }
+    
     return *this;
 }
 
@@ -168,7 +167,6 @@ void queue::pop(){
             oldFirst = nullptr;
         }
         
-         
         current_size--;
     } else {
         throw std::runtime_error("pop: there is no elements in queue");
@@ -177,6 +175,7 @@ void queue::pop(){
 
 void queue::clear(){
     while(current_size>0){
+        std::cout<<first->val<<" "<<last->val<<" clear is here"<<std::endl;
         pop();
     }
 }
